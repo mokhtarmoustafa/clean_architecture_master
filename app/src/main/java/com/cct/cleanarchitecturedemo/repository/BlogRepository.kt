@@ -12,11 +12,12 @@ class BlogRepository(private val dao: BlogDao,private val service: BlogService) 
 
      suspend fun getBlogs(): Flow<DataState<List<Blog>>> = flow {
         try {
+            emit(DataState.Loading)
             val networkBlogs = service.getPlugs()
             networkBlogs.forEach {
                 dao.insertBlog(it)
             }
-            emit(DataState.Success(networkBlogs))
+            emit(DataState.Success(dao.getBlogs()))
         } catch (ex: Exception) {
             emit(DataState.Error(ex.message!!))
         }

@@ -16,7 +16,7 @@ class BlogRepository(private val dao: BlogDao,private val service: BlogService) 
             networkBlogs.forEach {
                 dao.insertBlog(it)
             }
-            emit(DataState.Success(networkBlogs))
+            emit(DataState.Success(dao.getBlogs()))
         } catch (ex: Exception) {
             emit(DataState.Error(ex.message!!))
         }

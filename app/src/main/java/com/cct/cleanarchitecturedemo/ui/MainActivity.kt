@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     //region variables
-    private lateinit var viewModel: MainViewModel
+    private  val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     //endregion
 
@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.setState(ViewModelState.getBlogs)
         getBlogs()
 

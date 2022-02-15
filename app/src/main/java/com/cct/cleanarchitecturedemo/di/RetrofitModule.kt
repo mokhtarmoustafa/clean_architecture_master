@@ -9,8 +9,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
-import java.nio.file.attribute.AclEntry.newBuilder
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -31,7 +29,7 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun provideService(retrofit: Retrofit): BlogService {
-        return retrofit.newBuilder().build().create(BlogService::class.java)
+    fun provideService (retrofit: Retrofit.Builder): BlogService {
+        return retrofit.build().create(BlogService::class.java)
     }
 }

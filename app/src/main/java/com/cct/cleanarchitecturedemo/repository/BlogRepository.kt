@@ -7,10 +7,10 @@ import com.cct.cleanarchitecturedemo.util.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
+
 class BlogRepository(private val dao: BlogDao,private val service: BlogService) {
 
      suspend fun getBlogs(): Flow<DataState<List<Blog>>> = flow {
-        emit(DataState.Loading)
         try {
             val networkBlogs = service.getPlugs()
             networkBlogs.forEach {
@@ -18,7 +18,7 @@ class BlogRepository(private val dao: BlogDao,private val service: BlogService) 
             }
             emit(DataState.Success(networkBlogs))
         } catch (ex: Exception) {
-            emit(DataState.Error(ex.message))
+            emit(DataState.Error(ex.message!!))
         }
     }
 }

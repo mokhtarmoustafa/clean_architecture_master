@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 
-class BlogRepository(private val dao: BlogDao,private val service: BlogService) {
+class BlogRepository(private val dao: BlogDao, private val service: BlogService) {
 
-     suspend fun getBlogs(): Flow<DataState<List<Blog>>> = flow {
+    suspend fun getBlogs(): Flow<DataState<List<Blog>>> = flow {
         try {
             emit(DataState.Loading)
             val networkBlogs = service.getPlugs()

@@ -1,4 +1,4 @@
-package com.cct.cleanarchitecturedemo.util
+package com.cct.cleanarchitecturedemo.ui
 
 sealed class ViewModelState {
     object getBlogs : ViewModelState()

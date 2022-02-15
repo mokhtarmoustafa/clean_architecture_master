@@ -1,23 +1,24 @@
 package com.cct.cleanarchitecturedemo.ui
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import com.cct.cleanarchitecturedemo.R
 import com.cct.cleanarchitecturedemo.databinding.ActivityMainBinding
 import com.cct.cleanarchitecturedemo.model.Blog
+import com.cct.cleanarchitecturedemo.util.ConnectionLiveData
 import com.cct.cleanarchitecturedemo.util.DataState
-import com.cct.cleanarchitecturedemo.util.ViewModelState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     //region variables
-    private  val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
+    private lateinit var connectivityLiveData: ConnectionLiveData
     //endregion
 
     //region events
@@ -26,24 +27,36 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        viewModel.setState(ViewModelState.getBlogs)
-        getBlogs()
+        init()
 
     }
+
 
     //endregion
 
     //region helper functions
+    private fun init() {
+        ConnectionLiveData(this).also { connectivityLiveData = it }
+        connectivityLiveData.observe(this, { isConnected ->
+            if (isConnected) {
+                viewModel.setState(ViewModelState.getBlogs)
+                getBlogs()
+            } else {
+                binding.tvData.text = getString(R.string.no_internet)
+            }
+        })
+    }
+
     private fun getBlogs() {
-        viewModel.blogs.observe(this, Observer { dataState ->
+        viewModel.blogs.observe(this, { dataState ->
             when (dataState) {
                 is DataState.Success<List<Blog>> -> {
                     showProgress(false)
-                    getData(dataState.data)
+                    showData(dataState.data)
                 }
                 is DataState.Error -> {
                     showProgress(false)
-                    showErrorMessage(dataState.exceptionMessage as String)
+                    showErrorMessage(dataState.exceptionMessage)
                 }
                 is DataState.Loading -> {
                     showProgress(true)
@@ -52,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun getData(data: List<Blog>) {
+    private fun showData(data: List<Blog>) {
         val builder = StringBuilder()
         data.let { blogs ->
             if (blogs.isNotEmpty()) {

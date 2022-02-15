@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.cct.cleanarchitecturedemo.R
 import com.cct.cleanarchitecturedemo.databinding.ActivityMainBinding
@@ -26,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-
         init()
 
     }
@@ -42,7 +42,8 @@ class MainActivity : AppCompatActivity() {
                 viewModel.setState(ViewModelState.getBlogs)
                 getBlogs()
             } else {
-                binding.tvData.text = getString(R.string.no_internet)
+                Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show()
+
             }
         })
     }

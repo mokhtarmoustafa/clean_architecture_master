@@ -5,9 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.cct.cleanarchitecturedemo.databinding.ActivityMainBinding
+import com.cct.cleanarchitecturedemo.domain.models.BlogEntity
+import com.cct.cleanarchitecturedemo.util.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -33,13 +34,24 @@ class MainActivity : AppCompatActivity() {
     //region helper functions
     private fun init() {
         lifecycleScope.launch {
-            viewModel.blogList.observe(this@MainActivity,  {result->
-                when(result)
-                {
-
+            viewModel.blogList.observe(this@MainActivity) { result ->
+                when (result) {
+                    is DataState.Loading -> {
+                        binding.tvData.text="Loading...."
+                    }
+                    is DataState.Success -> getBlogs(result)
+                    is DataState.Error -> { binding.tvData.text=result.exceptionMessage}
                 }
-            })
+            }
         }
+    }
+
+    private fun getBlogs(result: DataState.Success<List<BlogEntity>>) {
+        val builder = StringBuilder()
+        result.data.map {
+            builder.appendLine(it.title)
+        }
+        binding.tvData.text = builder.toString()
     }
 
 

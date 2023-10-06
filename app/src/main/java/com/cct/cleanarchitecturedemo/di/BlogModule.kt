@@ -2,6 +2,7 @@ package com.cct.cleanarchitecturedemo.di
 
 import com.cct.cleanarchitecturedemo.data.remote.BlogService
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +23,7 @@ object BlogModule {
 
     @Singleton
     @Provides
-    fun provideGson(gson: Gson):Gson =gson
+    fun provideGson():Gson =GsonBuilder().create()
     @Singleton
     @Provides
     fun provideGsonConverterFactory( gson: Gson):GsonConverterFactory= GsonConverterFactory.create(gson)

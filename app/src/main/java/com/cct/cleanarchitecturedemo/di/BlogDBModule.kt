@@ -2,7 +2,6 @@ package com.cct.cleanarchitecturedemo.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.cct.cleanarchitecturedemo.domain.models.BlogDao
 import com.cct.cleanarchitecturedemo.domain.models.BlogDatabase
 import dagger.Module

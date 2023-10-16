@@ -21,7 +21,7 @@ class BlogViewModel @Inject constructor(private val getBlogsUseCase: GetBlogsUse
 
     val blogList: LiveData<DataState<List<BlogEntity>>> get() = _blogList
 
-    init {
+     init {
         getBlogsData()
     }
 
